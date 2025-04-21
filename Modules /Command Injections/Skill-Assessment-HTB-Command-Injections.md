@@ -41,6 +41,7 @@ ajax=true&content=have&path=.&type=search
 ![image](https://github.com/user-attachments/assets/6873e2e7-139e-45b3-ac5b-dab7f9a283d1)
 
 Initially, attempts to execute commands directly such as `whoami` through either `to=` or `from=` parameters were denied, returning the message **"Malicious request denied."**
+
 **whoami in to**
 ![image](https://github.com/user-attachments/assets/2d4c5af4-8740-4b8d-9aeb-bd4ef6eb49d6)
 
@@ -59,7 +60,8 @@ Again doing GET /index.php?to=&from=51459716.txt%26%26whoami&finish=1&move=1;who
 
 ![image](https://github.com/user-attachments/assets/e8fec73e-719a-41f5-9bec-e10ae712f2cd)
 
-To execute commands stealthily, I used `base64` encoding to hide command payloads. 
+To bypass these filters, I base64-encoded the command strings to obfuscate them. For example, I encoded whoami using `echo -n "whoami" | base64`, resulting in `d2hvYW1p`. I then used the following crafted request to attempt execution: 
+
 ![image](https://github.com/user-attachments/assets/237a083a-79b4-48e4-9399-f7c548d7404c)
 
 And used that command as follows:
