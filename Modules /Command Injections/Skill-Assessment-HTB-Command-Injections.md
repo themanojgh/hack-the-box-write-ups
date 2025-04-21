@@ -47,8 +47,6 @@ Initially, attempts to execute commands directly such as `whoami` through either
 **whoami in from**
 ![image](https://github.com/user-attachments/assets/26105475-ad8d-415e-bdf3-57f711723319)
 
-Both these gave Malicious request denied.
-
 ![image](https://github.com/user-attachments/assets/2b26095f-76c4-4fc0-9f17-7af93f1fccb6)
 
 ![image](https://github.com/user-attachments/assets/c3e50e94-e288-420d-b846-8d04959c3554)
