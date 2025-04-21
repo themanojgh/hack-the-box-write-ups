@@ -1,23 +1,50 @@
-GET /index.php?to=&view=51459716.txt&quickView=1 (View)
+After navigating to the provided IP address, I was presented with a login form. 
+![image](https://github.com/user-attachments/assets/8f63b8e7-44c3-459e-9468-332e2290d76e)
+
+Using the credentials guest for both the username and password, I successfully logged in and accessed the main interface of the application. 
+![image](https://github.com/user-attachments/assets/bf60fa83-7a6b-47c7-993e-f9a1d669be58)
+
+The dashboard displayed a list of files, each with multiple available actions: **View, Copy to, Direct Link, and Download**. There was also an **Advanced Search** feature. Screenshots of the interface are included below for reference. This initial exploration helped me understand how the web application handled file operations, which later played a key role in identifying command injection points and exploiting them to retrieve the target flag.
+
+Each action triggered specific HTTP GET requests, and by analyzing how the to, from, and move parameters behaved, I started mapping how file operations were executed on the backend. 
+
+### View
+```bash
+GET /index.php?to=&view=51459716.txt&quickView=1
+```
 ![image](https://github.com/user-attachments/assets/bdc65f98-b252-47f3-a07b-1515a7ef36d5)
 
-GET /index.php?to=&from=51459716.txt (Copy to)
+### Copy to
+```bash
+GET /index.php?to=&from=51459716.txt
+```
 ![image](https://github.com/user-attachments/assets/19de108f-c090-464c-823e-9566108aaa5b)
 
-GET /51459716.txt (Direct Link)
+### Direct Link
+```bash
+GET /51459716.txt
+```
 ![image](https://github.com/user-attachments/assets/b83b42fe-3c22-450e-8034-b638a8cc5615)
 
-GET /index.php?to=&dl=51459716.txt (Download)
+### Download
+```bash
+GET /index.php?to=&dl=51459716.txt
+```
 ![image](https://github.com/user-attachments/assets/b2b95793-2c9b-42cd-ace5-1cf5ae02dba7)
 
-Advance Search
+### Advance Search
+```bash
+POST /index.php?to= HTTP/1.1
+SNIP...
+ajax=true&content=have&path=.&type=search
+```
 ![image](https://github.com/user-attachments/assets/6873e2e7-139e-45b3-ac5b-dab7f9a283d1)
 
-Checked with whoami in to
+Initially, attempts to execute commands directly such as `whoami` through either `to=` or `from=` parameters were denied, returning the message **"Malicious request denied."**
+**whoami in to**
 ![image](https://github.com/user-attachments/assets/2d4c5af4-8740-4b8d-9aeb-bd4ef6eb49d6)
 
-
-Checked with whoami in from
+**whoami in from**
 ![image](https://github.com/user-attachments/assets/26105475-ad8d-415e-bdf3-57f711723319)
 
 Both these gave Malicious request denied.
