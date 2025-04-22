@@ -33,9 +33,11 @@ When manually visiting /documents.php via browser (or by crafting a POST request
 ```
 
 The naming format followed:
-[DocumentType]_[UID]_[Month]_[Year].pdf
+
+`[DocumentType]_[UID]_[Month]_[Year].pdf`
 
 ![image](https://github.com/user-attachments/assets/1e59c7b9-11d2-44fd-ade8-451790df7e13)
+
 This suggested that the application returned files belonging to the UID provided, without validating the requester's authorization.
 
 ### 🧪 Exploitation
@@ -81,9 +83,11 @@ for uid in $(seq 1 $max_uid); do
 done
 ```
 
-Save it as idor_enum_download_all.sh
-Make it executable: chmod +x idor_enum_download_all.sh
-Run it: ./idor_enum_download_all.sh
+Save it as : `idor_enum_download_all.sh`
+
+Make it executable: `chmod +x idor_enum_download_all.sh`
+
+Run it: `./idor_enum_download_all.sh`
 
 ### Output
 
@@ -135,4 +139,6 @@ UID | FILE NAME 1 | FILE NAME 2 | FILE NAME 3
 ### 🏁 Flag Found
 
 Using the script, UID 15 returned an unexpected .txt file, which turned out to be a flag:
+```bash
 cat downloads/flag_11dfa168ac8eb2958e38425728623c98.txt
+```
