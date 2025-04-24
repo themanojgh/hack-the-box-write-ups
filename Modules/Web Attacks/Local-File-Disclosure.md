@@ -84,7 +84,7 @@ catch (exception $e) {
 ```
 ## ✅ Extracted API Key:
 
-UTM1NjM0MmRjJ2dmcTIZND0wMXJnZXdmc2RmCg
+`UTM1NjM0MmRjJ2dmcTIZND0wMXJnZXdmc2RmCg`
 
 ## Conclusion
 This test demonstrated a classic XXE (XML External Entity) vulnerability in the contact form of the web application. The lack of input validation and the use of outdated XML parsers allowed the injection of external entities, leading to local file disclosure and the extraction of sensitive credentials from server-side configuration files.
