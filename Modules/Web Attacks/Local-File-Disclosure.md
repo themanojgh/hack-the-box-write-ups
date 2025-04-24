@@ -22,7 +22,7 @@ Content-Type: text/plain;charset=UTF-8
   <message>thank you</message>
 </root>
 ```
-The request body is in XML format, making it a potential target for XXE. Notably, the value inside the <email> tag is reflected in the server's HTTP response, which makes it a suitable injection point for XXE payloads.
+The request body is in XML format, making it a potential target for XXE. Notably, the value inside the `<email>` tag is reflected in the server's HTTP response, which makes it a suitable injection point for XXE payloads.
 
 ## 2. XXE Payload Test
 To test for XXE, I inserted an XML DTD and referenced an entity inside the `<email>` field:
@@ -64,8 +64,9 @@ The server responded with the base64-encoded contents of the connection.php file
 The output from the server was:
 ```bash
 PD9waHAKCiRhcGlfa2V5ID0gIlVUTTFOak0wTW1SekoyZG1jVEl6TkQwd01YSm5aWGRtYzJSbUNnIjsKCnRyeSB7CgkkY29ubiA9IHBnX2Nvbm5lY3QoImhvc3Q9bG9jYWxob3N0IHBvcnQ9NTQzMiBkYm5hbWU9dXNlcnMgdXNlcj1wb3N0Z3JlcyBwYXNzd29yZD1pVWVyXnZkKGUxUGw5Iik7Cn0KCmNhdGNoICggZXhjZXB0aW9uICRlICkgewogCWVjaG8gJGUtPmdldE1lc3NhZ2UoKTsKfQoKPz4K
-Decoded using base64, the PHP source revealed:
 ```
+Decoded using `base64`, the PHP source revealed:
+
 ```bash
 <?php
 
