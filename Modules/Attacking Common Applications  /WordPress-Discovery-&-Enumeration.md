@@ -16,7 +16,7 @@ echo "10.129.36.157 blog.inlanefreight.local" | sudo tee -a /etc/hosts
 Logged into `wpscan.com` and generated a free API token for scanning.
 
 ```bash
-sudo wpscan --url http://blog.inlanefreight.local --enumerate --api-token CKFtS1LOOsbzSIcmHRy3aUjdLmuOXa0l22CjGthJwAc
+sudo wpscan --url http://blog.inlanefreight.local --enumerate --api-token CKFt<SNIP>
 _______________________________________________________________
          __          _______   _____
          \ \        / /  __ \ / ____|
