@@ -93,6 +93,8 @@ I noticed NOPASSWD rights for `/usr/bin/busctl`. Using the following command, I 
 ```bash
 sudo /usr/bin/busctl list
 ```
+![image](https://github.com/user-attachments/assets/59be6bef-03f0-486c-8f56-f8c3e85db138)
+
 I spawned a root shell by leveraging D-Bus interaction, then navigated to the root's home directory to find the final flag:
 ```bash
 cd /root
