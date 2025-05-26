@@ -127,11 +127,14 @@ type flag.txt
 ```
 
 ## 📝 Summary
-Step	Action	Status
-1	RDP Access	✅
-2	SMB Delivery	✅
-3	Shell via DLL	✅
-4	Process Migration	✅
-5	Privilege Escalation with MS10-092	✅
-6	SYSTEM Access	✅
-7	Flag Retrieved	✅
+
+| Step                              | Action                          | Status |
+|-----------------------------------|----------------------------------|--------|
+| 1                                 | RDP Access                       | ✅     |
+| 2                                 | SMB Delivery                     | ✅     |
+| 3                                 | Shell via DLL                    | ✅     |
+| 4                                 | Process Migration                | ✅     |
+| 5                                 | Privilege Escalation with MS10-092 | ✅  |
+| 6                                 | SYSTEM Access                    | ✅     |
+| 7                                 | Flag Retrieved                   | ✅     |
+
