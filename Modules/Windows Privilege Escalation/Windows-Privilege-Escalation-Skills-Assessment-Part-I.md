@@ -109,6 +109,7 @@ Found confidential.txt containing a flag.
 ![image](https://github.com/user-attachments/assets/7090d170-1003-47a3-aeb3-d757ad0eac1f)
 
 **Administrator Flag**
+
 Negivated to the Administrator's Desktop and found a flag.
 
 **Search for LDAP Password**
@@ -120,4 +121,5 @@ powershell -Command "Get-ChildItem -Path C:\Users\ -Recurse -File -ErrorAction S
 Successfully found credentials or strings related to `ldapadmin`.
 
 **Patch Check**
+
 `systeminfo' gave two KB's running in the system.
